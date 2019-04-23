@@ -14,5 +14,6 @@ In this folder there are some exercises related with shared memory.
 
 ## Note
 > If you want to help with some exercises or if I have any mistake or you want to improve an algorithm, please contact me!
+> I will be uptading this repository with new exercises and comments in the code.
 
 See also the list of [contributors](https://github.com/kmilo9713/Sistemas-Operativos/graphs/contributors) who participated in this project.

@@ -5,42 +5,63 @@
 #include <time.h>
 #include <stdlib.h>
 
-FILE *archivo = NULL;
-void generar_archivo(char *, int);
-void enviar_tuberia(char *, int fd[]);
-void leer_tuberia(int [], int);
-void error(char *);
+/*
+	Camilo Laiton
+	Estudiante Ingenieria de Sistemas
+	Universidad del Magdalena
+	2019 - 1
+	Sistema Operativo usado -> Linux
+*/
+
+/*
+	Exercise
+	
+	The father is going to have two children where one child process
+	is going to send information the other one, the information 
+	that's going to be sent is saved in a file. The file have to be
+	created by the user and when the other process gets the information
+	it has to show it.
+
+	NOTE: This exercise is solved in a easy way.
+*/
+
+FILE *archivo = NULL;	//Puntero file para el archivo
+void generar_archivo(char *, int);	//Funcion para generar archivo
+void enviar_tuberia(char *, int fd[]);	//Funcion para enviar a traves de tuberia
+void leer_tuberia(int [], int);	//Funcion para leer de tuberia
+void error(char *);	//Funcion de error
 
 int main(int argc, char const *argv[])
 {
-	srand(time(NULL));
+	srand(time(NULL));	//Semilla
 
-	char *filename1 = "file1.txt";
-	int n_procesos = 2;
-	int fd[2], f;
+	char *filename1 = "file1.txt";	//Nombre del archivo a manejar
+	int n_procesos = 2;	//Numero de procesos
+	int fd[2], f = 0;	//File decriptors
 
-	generar_archivo(filename1, 200);
+	generar_archivo(filename1, 200);	//Make file
 
-	if(pipe(fd) < 0)
+	if(pipe(fd) < 0)	//Make pipe
 		exit(EXIT_FAILURE);
 
 	switch(fork())
 	{
-		case -1:
+		case -1:	//Fork is going to return -1 if there's an error, 0 if it's the child process
+					//And the PID to the father
 			error("No se pudo crear el proceso");
 			break;
 
 		case 0:
-			close(fd[0]);
+			close(fd[0]);	//Close read fd -> first process
 
-			enviar_tuberia(filename1, fd);
+			enviar_tuberia(filename1, fd);	//Send information to pipe
 
-			close(fd[1]);
+			close(fd[1]);	//Close write fd -> first process
 
-			exit(EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);	//First process -> exit
 			break;
 
-		default:
+		default:	//If I am the father...
 
 			switch(fork())
 			{
@@ -49,19 +70,19 @@ int main(int argc, char const *argv[])
 					break;
 
 				case 0:
-					close(fd[1]);
+					close(fd[1]);	//Second process is just going to read
+									//Close write fd 
+					leer_tuberia(fd, 1);	//Read from pipe
 
-					leer_tuberia(fd, 1);
-
-					close(fd[0]);
-					exit(EXIT_SUCCESS);
+					close(fd[0]);	//Close read fd
+					exit(EXIT_SUCCESS);	//Second process -> exit
 
 					break;
 			}
 
-			close(fd[0]);
+			close(fd[0]);	//Father closes the fd's [File Decriptor = fd]
 			close(fd[1]);
-			wait(NULL);
+			wait(NULL);	//Father waits 2 children
 			wait(NULL);
 			break;
 	}

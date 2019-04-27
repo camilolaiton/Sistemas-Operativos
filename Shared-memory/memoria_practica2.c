@@ -23,6 +23,8 @@ FILE *archivo = NULL;
 	Universidad del Magdalena
 	2019 - 1
 	Sistema Operativo usado -> Linux
+
+	In this exercise we're going to upload 3 matrices from a file into 3 processes
 */
 
 int main(int argc, char const *argv[])

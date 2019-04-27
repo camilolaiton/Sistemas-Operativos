@@ -13,31 +13,33 @@
 	Sistema Operativo usado -> Linux
 */
 
-void error(char *);
+void error(char *);	//Funcion basica de Error
 
 int main(int argc, char const *argv[])
 {
-	void *ptr = NULL;
-	int shm_id = 0;
-	int shm_size = 1024;
+	void *ptr = NULL;	//Puntero para cast y direccion de espacio memoria
+	int shm_id = 0;	//Variable for saving shared memory id
+	int shm_size = 1024;	//Size of the space
 
-	shm_id = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | S_IRUSR | S_IWUSR);
+	shm_id = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | S_IRUSR | S_IWUSR);	//Let's create the space memory
+	//This function returns -1 if the space couldn't be created, and the id if it could
 
 	if(shm_id != -1)
 	{
-		ptr = shmat(shm_id, 0, 0);
+		ptr = shmat(shm_id, 0, 0);//Let's attach the memory space into this process
+		//This function returns NULL if it couldn't attach the memory space
 
 		if(ptr)
 		{
 
-			if(!fork())
+			if(!fork())//Here we create the new process
 			{
 				sleep(2);
 				printf("[%d]-> Valor: [%s]\n", getpid(), (char*)ptr);
 				sprintf(ptr, "Bye! Enviado de: [%d]", getpid());
 				shmdt(ptr);
 			}
-			else
+			else//Change the memory space value
 			{
 				sprintf(ptr, "hola mundo -> [%d]", getpid());
 				printf("[%d] -> Valor: [%s]\n", getpid(), (char*)ptr);

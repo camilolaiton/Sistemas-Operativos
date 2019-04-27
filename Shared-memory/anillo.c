@@ -13,6 +13,29 @@ void create_index(void **, int, int, size_t);
 int validar_num(int, int);
 int encontrar_num_proc(int, int);
 
+/*
+	Camilo Laiton
+	Estudiante Ingenieria de Sistemas
+	Universidad del Magdalena
+	2019 - 1
+	Sistema Operativo usado -> Linux
+
+	In this exercise we will add sections from a matriz, it's going to be nxn or nxm
+	the number of children processes are going to depend on the matriz because
+	one child is going to process one section, the section is going to be like
+
+	* * * *
+	* x x *
+	* * * *
+
+	Child 1 -> *
+	Child 2 -> x
+
+	The father is going to show the result
+
+	NOTE: Be carefull with the last process (child 2 in the example).
+*/
+
 int main(int argc, char const *argv[])
 {
 
@@ -22,7 +45,7 @@ int main(int argc, char const *argv[])
 	int *acu = 0, **matriz = NULL;
 	int rows = 3, cols = 4, n_procesos = 0, i = 0;	//Calcular numero de procesos dependiendo la matriz
 
-	if(validar_num(rows, cols))
+	if(validar_num(rows, cols))//esta parte del codigo explicado en otros ejercicios
 	{
 		n_procesos = encontrar_num_proc(rows, cols);
 		size_t sizeMatriz = sizeof_dm(rows, cols, sizeof(int));
@@ -39,14 +62,14 @@ int main(int argc, char const *argv[])
 			{
 				create_index((void*)matriz, rows, cols, sizeof(int));
 				
-				for (int p = 0; p < n_procesos; ++p)
+				for (int p = 0; p < n_procesos; ++p)//Inicializo en 0 el acumulador
 				{
 					acu[p] = 0;
 				}
 
 				printf("Numero de procesos: [%d]\n", n_procesos);
 
-				for ( i = 0; i < n_procesos; ++i)
+				for ( i = 0; i < n_procesos; ++i)//Creo el numero de procesos indicados para la matriz
 				{
 					hijo = fork();
 
@@ -63,7 +86,7 @@ int main(int argc, char const *argv[])
 				if(padre == getpid())
 				{
 					/* Soy el padre */
-					for (int r = 0; r < rows; ++r)
+					for (int r = 0; r < rows; ++r)//Inicializamos la matriz
 					{
 						for (int c = 0; c < cols; ++c)
 						{
@@ -78,17 +101,20 @@ int main(int argc, char const *argv[])
 					sprintf(instruccion, "pstree -lp %d", getpid());	//Mostrar el arbol de procesos
 					system(instruccion);
 
-					esperar_padre(n_procesos);
+					esperar_padre(n_procesos);//Funcion para esperar padre
 				
 					for (int p = 0; p < n_procesos; ++p)
 					{
 						printf("PID: [%d] Suma del hijo [%d] es: [%d]\n", getpid(), p, acu[p]);
 					}
 
-					shmdt(matriz);
+					shmdt(matriz);//Quitar espacio de memoria de este proceso
 					shmdt(acu);
 					shmctl(shm_id_matriz, IPC_RMID, 0);
-					shmctl(shm_id_suma, IPC_RMID, 0);
+					shmctl(shm_id_suma, IPC_RMID, 0);//Elimino los espacios de memoria
+					//Eliminar los espacios de memoria solo debe ser realizado por un solo proceso
+					//Pero siempre se debe quitar los espacios de memoria de cada uno de los procesos
+					//*Quitar* DIFERENTE de *eliminar*
 				}
 				else
 				{
@@ -98,7 +124,7 @@ int main(int argc, char const *argv[])
 					acu[i] = 0;
 					int temp = 0;
 
-					int row_a_sumar = i;
+					int row_a_sumar = i;	//Deben realizar las operaciones matematicas aca indicadas para entender
 					int row2_a_sumar = rows -1 -i;
 
 					int col_a_sumar = i;
@@ -112,11 +138,12 @@ int main(int argc, char const *argv[])
 						printf("\nHijo [%d] calcula posicion: [%d][%d]\nHijo [%d] calcula posicion: [%d][%d]", getpid(), c, row_a_sumar, getpid(), c, row2_a_sumar);
 					}
 
-					if((row_a_sumar+1) != row2_a_sumar)
-					{	
+					if((row_a_sumar+1) != row2_a_sumar)//condicion crucial, si el row superior + 1 es diferente a el row inferior quiere 			//
+					{									// decir que hay por lo menos dos rows para sumar
+						
 						//printf("PID[%d] INICIO [%d] FINAL [%d]\n", getpid(), i+1, rows-1-i);
 
-						for (int r = i+1; r < rows-1-i; ++r)
+						for (int r = i+1; r < rows-1-i; ++r)	//Sumo las columnas
 						{
 							temp += matriz[r][col_a_sumar];
 							temp += matriz[r][col2_a_sumar];
@@ -129,9 +156,9 @@ int main(int argc, char const *argv[])
 					printf("\nPID: [%d]-> Resultado:[%d]\n", getpid(), temp);
 					acu[i] = temp;
 
-					shmdt(matriz);
+					shmdt(matriz);//Quito los espacios de memoria de hijo 
 					shmdt(acu);
-					exit(EXIT_SUCCESS);
+					exit(EXIT_SUCCESS);//Salgo del proceso exitosamente
 				}
 
 			}
@@ -156,7 +183,7 @@ int main(int argc, char const *argv[])
 }
 
 int encontrar_num_proc(int rows, int cols)
-{
+{//FUncion para calcular el numero de procesos dependiendo la matriz
 	int menor = 1;
 
 	if(rows != cols)

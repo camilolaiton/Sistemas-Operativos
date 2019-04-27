@@ -58,18 +58,18 @@ int main(int argc, char const *argv[])
 	
 	if(validar_num(cantidad, rows) && validar_filas_cols(rows, cols))
 	{
-		n_procesos = cantidad;
+		n_procesos = cantidad;//The number of process is going to be cantidad
 
-		size_t sizeMatriz = sizeof_dm(rows, cols, sizeof(int));
+		size_t sizeMatriz = sizeof_dm(rows, cols, sizeof(int));//Here we create the array size
 		size_t sizeColumna = sizeof_dm(cols, 1, sizeof(int));
 
 		for (int i = 0; i < n_guardar; ++i)
 		{
-			if(i == 0)
+			if(i == 0)//position 0 is going to be for the normal matriz
 			{
 				shm_id_matrices[i] = shmget(IPC_PRIVATE, sizeMatriz, IPC_CREAT | 0600);
 			}
-			else
+			else//The rest are going to be for the column matrices
 			{
 				shm_id_matrices[i] = shmget(IPC_PRIVATE, sizeColumna, IPC_CREAT | 0600);
 			}
@@ -93,11 +93,11 @@ int main(int argc, char const *argv[])
 
 			//Las matrices columnas tendran solo 1 columna
 
-			inicializar_matriz(matriz_a, rows, cols, 0);
+			inicializar_matriz(matriz_a, rows, cols, 0);//Here we put values into the matriz
 			inicializar_matriz(matriz_b, cols, 1, 0);
 			inicializar_matriz(matriz_c, cols, 1, 1);
 
-			for (p = 0; p < n_procesos; ++p)
+			for (p = 0; p < n_procesos; ++p)//Create the process
 			{
 				hijo = fork();
 

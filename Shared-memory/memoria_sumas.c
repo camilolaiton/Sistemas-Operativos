@@ -6,6 +6,18 @@
 #include <time.h>
 #include <stdlib.h>
 
+/*
+	Camilo Laiton
+	Estudiante Ingenieria de Sistemas
+	Universidad del Magdalena
+	2019 - 1
+	Sistema Operativo usado -> Linux
+
+	In this exercise we create 3 processes where each one is going to operate one part
+	of the matriz, one the main diagonal, above the main diagonal and below the main diagonal.
+	The father is going to show the results
+*/
+
 unsigned int sizeof_dm(int, int, size_t);
 void create_index(void **, int, int, size_t);
 int validar_matriz(int);
@@ -118,7 +130,7 @@ int main(int argc, char const *argv[])
 
 						printf("PID: [%d] - Valor de la diagonal: [%d]\n", getpid(), temp);
 					}
-					else if(i == 1)
+					else if(i == 1)//below main diagonal
 					{
 						for (int c = 0; c < cols; ++c)
 						{
@@ -133,7 +145,7 @@ int main(int argc, char const *argv[])
 
 						printf("PID: [%d] - Valor izquierda diagonal: [%d]\n", getpid(), temp);
 					}
-					else
+					else//Above main diagonal
 					{
 
 						for (int r = 0; r < rows; ++r)

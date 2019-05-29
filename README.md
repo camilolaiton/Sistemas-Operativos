@@ -10,7 +10,7 @@ In this folder there are some exercises related with pipes, we are not using pip
 In this folder there are some exercises related with shared memory.
 
 ## [Threads](https://github.com/kmilo9713/Sistemas-Operativos/tree/master/Threads)
-In this folder there are some exercises related with threads.
+In this folder there are some exercises related with threads, we use conditional variables, mutexs and barriers for solving the exercises.
 
 ## Authors
 - **Camilo Laiton** [[kmilo9713]](https://github.com/kmilo9713)

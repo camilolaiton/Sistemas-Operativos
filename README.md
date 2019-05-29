@@ -9,6 +9,9 @@ In this folder there are some exercises related with pipes, we are not using pip
 ## [Shared-Memory](https://github.com/kmilo9713/Sistemas-Operativos/tree/master/Shared-memory)
 In this folder there are some exercises related with shared memory.
 
+## [Threads](https://github.com/kmilo9713/Sistemas-Operativos/tree/master/Threads)
+In this folder there are some exercises related with threads.
+
 ## Authors
 - **Camilo Laiton** [[kmilo9713]](https://github.com/kmilo9713)
 

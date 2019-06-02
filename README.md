@@ -1,5 +1,5 @@
 # Sistemas Operativos
-This repository has solved and explained exercises from the subject Sistemas Operativos, I'm a student from the Universidad del Magdalena and this repository has nothing to do with the university, I'm just doing this for people who need help with this kind of subject.
+This repository has solved and explained exercises from the subject Sistemas Operativos, I'm a student from the Universidad del Magdalena and this repository has nothing to do with the university, I'm just doing this for people who need help with this subject.
 
 In these exercises I don't use signals...
 

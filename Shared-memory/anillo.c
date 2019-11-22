@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
 	pid_t hijo = (pid_t)(0), padre = getpid();
 	int shm_id_matriz = 0, shm_id_suma = 0;
 	int *acu = 0, **matriz = NULL;
-	int rows = 3, cols = 4, n_procesos = 0, i = 0;	//Calcular numero de procesos dependiendo la matriz
+	int rows = 6, cols = 6, n_procesos = 0, i = 0;	//Calcular numero de procesos dependiendo la matriz
 
 	if(validar_num(rows, cols))//esta parte del codigo explicado en otros ejercicios
 	{
@@ -100,6 +100,10 @@ int main(int argc, char const *argv[])
 					char instruccion[400] = {'\0'};
 					sprintf(instruccion, "pstree -lp %d", getpid());	//Mostrar el arbol de procesos
 					system(instruccion);
+				
+					char instruccion2[50] = {'\0'};
+					sprintf(instruccion2, "ipcs -m -p -i %d", shm_id_suma);
+					system(instruccion2);
 
 					esperar_padre(n_procesos);//Funcion para esperar padre
 				

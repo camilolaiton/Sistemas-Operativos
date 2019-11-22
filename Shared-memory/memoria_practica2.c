@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
 			system(instruccion);
 
 			memset(instruccion, '\0', 50);
-			sprintf(instruccion, "ipcs -m -i %d", getpid());
+			sprintf(instruccion, "ipcs -m -i %d", shm_id_matriz[1]);
 			system(instruccion);
 
 			esperar_padre(n_procesos);
